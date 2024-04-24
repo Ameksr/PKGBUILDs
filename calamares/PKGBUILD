@@ -1,0 +1,48 @@
+pkgname="calamares"
+pkgver=3.3.6
+pkgrel=1
+pkgdesc="Fork of Calamares installer for Ameksr Linux"
+url="https://github.com/calamares/calamares"
+license=("GPL-3.0-or-later")
+arch=('x86_64')
+depends=(
+  'ckbcomp'
+  'hwinfo'
+  'kconfig'
+  'kcoreaddons'
+  'ki18n'
+  'kpmcore'
+  'libpwquality'
+  'polkit-qt6'
+  'python'
+  'python-jsonschema'
+  'python-yaml'
+  'qt6-svg'
+  'solid'
+  'squashfs-tools'
+  'yaml-cpp'
+)
+provides=("calamares")
+source=("https://github.com/calamares/${pkgname}/archive/refs/tags/v${pkgver}.tar.gz")
+sha256sums=('SKIP')
+
+build() {
+  cmake -B build -S "${srcdir}/calamares-${pkgver}" \
+	  -DCMAKE_BUILD_TYPE=Release \
+  	  -DCMAKE_INSTALL_PREFIX="/usr" \
+	  -DCMAKE_INSTALL_LIBDIR="/usr/lib" \
+	  -DWITH_QT6=ON \
+	  -DINSTALL_CONFIG=ON \
+	  -DSKIP_MODULES="dracut dracutlukscfg \ 
+	  dummycpp dummyprocess dummypython dummpythonqt \
+	  finishedq initcpio keyboardq license localeq notesqml oemid \
+	  openrcdmcryptcfg plymouthcfg plasmalnf services-openrc \
+	  summaryq tracking usersq webview welcomeq"
+  export DESTDIR="$srcdir/build"
+  make -C build
+}
+
+package() {
+  make -C build DESTDIR="${pkgdir}" install
+  install -dm755 "${pkgdir}/etc"
+}
