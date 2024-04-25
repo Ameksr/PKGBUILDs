@@ -35,7 +35,7 @@ build() {
 	  -DINSTALL_CONFIG=ON \
 	  -DSKIP_MODULES="dracut dracutlukscfg \ 
 	  dummycpp dummyprocess dummypython dummpythonqt \
-	  finishedq initcpio keyboardq license localeq notesqml oemid \
+	  finishedq keyboardq license localeq notesqml oemid \
 	  openrcdmcryptcfg plymouthcfg plasmalnf services-openrc \
 	  summaryq tracking usersq webview welcomeq"
   export DESTDIR="$srcdir/build"
